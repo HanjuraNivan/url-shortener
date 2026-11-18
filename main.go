@@ -31,7 +31,7 @@ func main() {
 		return
 	}
 	router := gin.Default()
-	openapi.RegisterHandlers(router)
+	openapi.RegisterHandlers(router, abc)
 }
 
 func connectToPostgres() (*pgx.Conn, error) {
