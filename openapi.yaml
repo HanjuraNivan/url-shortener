@@ -1,0 +1,64 @@
+openapi: 3.0.4
+info:
+  title: URL Shortener API
+  description: An API for shortening URLs and retrieving original URLs.
+  version: 1.0.0
+paths:
+  /shorten:
+    post:
+      summary: Shorten a URL
+      operationId: ShortenURL
+      requestBody:
+        description: The URL to be shortened.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  format: uri
+                  description: The original URL to be shortened.
+              required:
+                - url
+      responses:
+        '200':
+          description: Successfully shortened the URL.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  shortUrl:
+                    type: string
+                    format: uri
+                    description: The shortened URL.
+        '400':
+          description: Invalid input, URL is not valid.
+  /fullURL:
+    get:
+      summary: Retrieve the original URL from a shortened URL
+      operationId: GetOriginalURL
+      parameters:
+        - in: query
+          name: shortUrl
+          schema:
+            type: string
+            format: uri
+          required: true
+          description: The shortened URL to retrieve the original URL for.
+      responses:
+        '200':
+          description: Successfully retrieved the original URL.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  originalUrl:
+                    type: string
+                    format: uri
+                    description: The original URL corresponding to the shortened URL.
+        '404':
+          description: Shortened URL not found.
