@@ -7,8 +7,6 @@ import (
 	"net/http"
 	"os"
 
-	openapi "github.com/HanjuraNivan/url-shortener/api"
-	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5"
 )
 
@@ -31,8 +29,8 @@ func main() {
 		fmt.Println("Error starting HTTP server:", err)
 		return
 	}
-	router := gin.Default()
-	openapi.RegisterHandlers(router)
+	//router := gin.Default()
+	//openapi.RegisterHandlers(router)
 }
 
 func connectToPostgres() (*pgx.Conn, error) {
