@@ -66,6 +66,7 @@ func (s *Services) GetOriginalURL(c *gin.Context, params api.GetOriginalURLParam
 		c.JSON(404, generateErrorMessage("Full URL is empty for this short URL"))
 		return
 	}
+
 	c.JSON(200, struct {
 		FullURL string
 	}{
