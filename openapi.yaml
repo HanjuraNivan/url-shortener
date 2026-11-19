@@ -62,3 +62,45 @@ paths:
                     description: The original URL corresponding to the shortened URL.
         '404':
           description: Shortened URL not found.
+  /{shortenedURL}:
+    get:
+      summary: Redirects to the original url
+      operationId : RedirectToOriginalUrl
+      parameters:
+          - in: path
+            name: shortenedURL
+            schema:
+              type: string
+            required: true
+            description: The shortened URL to retrieve the original URL for.
+      responses:
+          '302':
+            description: Successfully redirected.
+          '400':
+            description: Invalid input, URL is not valid.
+  /clickedTimes/{shortenedURL}:
+    get:
+      summary: Gets you the count of how manytimes a url is clicked
+      operationId: GetUrlClicks
+      parameters:
+          - in: path
+            name: shortenedURL
+            schema:
+              type: string
+            required: true
+            description: The shortened URL to retrieve the original URL for.
+      responses:
+            '200':
+              description: Successfully redirected.
+              content:
+                application/json:
+                  schema:
+                  type: object
+                  properties:
+                    count:
+                      type: number
+                      description: The clicked count of the short url.
+            '400':
+              description: Invalid input, shortcode is not valid.
+            '404':
+              description: Short code not found

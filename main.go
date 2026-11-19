@@ -7,6 +7,9 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/HanjuraNivan/url-shortener/api"
+	"github.com/HanjuraNivan/url-shortener/services"
+	urlshortenersqlc "github.com/HanjuraNivan/url-shortener/sqlc/urlshortenerqueries"
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5"
 )
@@ -25,13 +28,15 @@ func main() {
 		return
 	}
 	fmt.Println("Successfully connected to Postgres!")
-	err = http.ListenAndServe(":8080", nil)
+
+	router := gin.Default()
+	newServices := services.NewServices(urlshortenersqlc.New(connection))
+	api.RegisterHandlers(router, newServices)
+	err = http.ListenAndServe(":8080", router)
 	if err != nil {
 		fmt.Println("Error starting HTTP server:", err)
 		return
 	}
-	router := gin.Default()
-	openapi.RegisterHandlers(router, abc)
 }
 
 func connectToPostgres() (*pgx.Conn, error) {
@@ -40,7 +45,6 @@ func connectToPostgres() (*pgx.Conn, error) {
 	dbHost := os.Getenv("DB_HOST")
 	dbPort := os.Getenv("DB_PORT")
 	connectionString := fmt.Sprintf("postgresql://%s:%s@%s:%s/postgres", dbUser, dbPassword, dbHost, dbPort)
-	fmt.Println(connectionString)
 	conn, err := pgx.Connect(context.Background(), connectionString)
 	if err != nil {
 		return nil, errors.New("Cannot connect to database. Please check env variables.")
